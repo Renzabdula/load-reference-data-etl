@@ -4,6 +4,9 @@ import os
 from os import remove
 from pathlib import Path
 
+uid = os.environ['uid']
+pwd = os.environ['pwd']
+
 
 def file_to_delete(file_source: str | Path):
     remove(file_source)
@@ -30,13 +33,15 @@ def extract():
 def load(df, tbl_name, file_source):
     try:
         rows_imported = 0
-        engine = create_engine("postgresql://etl:demopass@localhost:5432/db_demo")
+        engine = create_engine(f"postgresql://{uid}:{pwd}@localhost:5432/db_demo")
         print(f"importing rows {rows_imported} to {rows_imported + len(df)}...")
         # save df to postgres
         df.to_sql(f"stg_{tbl_name}", engine, if_exists='replace', index=False)
         rows_imported += len(df)
         print(f"data imported successfully")
 
+
+        # delete file after loaded to sql
         file_to_delete(file_source)
         print(f'{file_source} deleted')
         
