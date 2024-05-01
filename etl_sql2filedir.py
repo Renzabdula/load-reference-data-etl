@@ -56,5 +56,6 @@ def load(df, tbl, dir):
 
         
         
+if __name__=='__main__':
 
-extract()
+    extract()
